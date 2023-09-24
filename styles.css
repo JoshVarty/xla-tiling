@@ -1,0 +1,62 @@
+h2 {
+    color: red;
+}
+
+table,
+tr {
+    text-align: center;
+}
+
+#table-outer-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+#table-container {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+table {
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+    width: 50%;
+    /* Adjust the width as needed */
+}
+
+td,
+th {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+.pad-value {
+    background-color: red;
+}
+
+/* CSS for styling the div and labels */
+.shape-info {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 20px 0;
+    width: 300px;
+    display: grid;
+    /* Two columns */
+    grid-template-columns: auto auto;
+    /* Spacing between columns */
+    grid-gap: 10px;
+}
+
+.label {
+    font-weight: bold;
+}
+
+/* CSS for styling the values */
+.value {
+    /* Align to the end (right) of the column */
+    justify-self: end;
+}
