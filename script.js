@@ -157,6 +157,7 @@ function parseXlaShape(shapeString) {
     };
 }
 
+// Set up click event for visualization button.
 document.getElementById("visualize-button").onclick = function () {
 
     let rawShapeText = document.getElementById('shape-input').value.toLowerCase();
@@ -168,19 +169,28 @@ document.getElementById("visualize-button").onclick = function () {
     document.getElementById("layout-dimensions").innerText = layoutDimensions;
     document.getElementById("tiling-dimensions").innerText = tilingDimensions;
 
+    if(logicalDimensions.length != 2) {
+        alert("Unsupported number of logical dimensions: " + logicalDimensions.length);
+        return;
+    }
+
+    if(tilingDimensions.length != 2) {
+        alert("Unsupported number of tiling dimensions: " + tilingDimensions.length);
+        return;
+    }
+
+    console.log(logicalDimensions);
+    console.log(tilingDimensions);
+
     // TODO(joshvarty): Parse from input shape.
-    let rows = 3;
-    let cols = 5;
+    let rows = logicalDimensions[0];
+    let cols = logicalDimensions[1];
     let shape = [rows, cols];
 
-    let tile0 = 2;
-    let tile1 = 2;
+    let tile0 = tilingDimensions[0];
+    let tile1 = tilingDimensions[1];
     let tiling = [tile0, tile1];
 
-    let roundedRows = roundUpToMultiple(rows, tile0);
-    let roundedCols = roundUpToMultiple(cols, tile1);
-
-    let numElements = rows * cols;
     const [data1d, data2d] = generateData(shape, tiling);
     console.log(data1d);
     console.log(data2d);
