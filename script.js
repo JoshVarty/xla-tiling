@@ -157,9 +157,7 @@ function parseXlaShape(shapeString) {
     };
 }
 
-// Set up click event for visualization button.
-document.getElementById("visualize-button").onclick = function () {
-
+function visualizeShape() {
     let rawShapeText = document.getElementById('shape-input').value.toLowerCase();
     console.log(rawShapeText);
 
@@ -169,12 +167,12 @@ document.getElementById("visualize-button").onclick = function () {
     document.getElementById("layout-dimensions").innerText = layoutDimensions;
     document.getElementById("tiling-dimensions").innerText = tilingDimensions;
 
-    if(logicalDimensions.length != 2) {
+    if (logicalDimensions.length != 2) {
         alert("Unsupported number of logical dimensions: " + logicalDimensions.length);
         return;
     }
 
-    if(tilingDimensions.length != 2) {
+    if (tilingDimensions.length != 2) {
         alert("Unsupported number of tiling dimensions: " + tilingDimensions.length);
         return;
     }
@@ -197,4 +195,17 @@ document.getElementById("visualize-button").onclick = function () {
 
     createTable(data2d, "table2d");
     createTable(data1d, "table1d");
+
+}
+
+// Set up click event for visualization button.
+document.getElementById("visualize-button").onclick = function () {
+    visualizeShape();
 };
+
+// Set up KeyUp handler to visualize when the user presses <Enter>.
+document.getElementById("shape-input").onkeyup = function(e) {
+    if(e.key === 'Enter' || e.keyCode === 13) {
+        visualizeShape();
+    }
+}
