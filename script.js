@@ -233,3 +233,8 @@ document.getElementById("shape-input").onkeyup = function(e) {
         visualizeShape();
     }
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Start with the default shape.
+    visualizeShape();
+});
