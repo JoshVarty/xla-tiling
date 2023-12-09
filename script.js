@@ -142,21 +142,21 @@ function generateData(shape, tiling) {
     let roundedRows = roundUpToMultiple(shape[0], tiling[0]);
     let roundedCols = roundUpToMultiple(shape[1], tiling[1]);
 
-    let data1d = Array(Product([roundedRows, roundedCols])).fill(-1);
-    let data2d = Array(roundedRows).fill().map(() => Array(roundedCols).fill(-1));
+    let physical_data = Array(Product([roundedRows, roundedCols])).fill(-1);
+    let logical_data = Array(roundedRows).fill().map(() => Array(roundedCols).fill(-1));
 
     let counter = 0;
     for (let i = 0; i < shape[0]; i++) {
         for (let j = 0; j < shape[1]; j++) {
             let multidimensional_index = [i, j];
             let linear_index = get_linear_index_with_tiling(multidimensional_index, shape, tiling);
-            data1d[linear_index] = counter;
-            data2d[i][j] = counter;
+            physical_data[linear_index] = counter;
+            logical_data[i][j] = counter;
             counter = counter + 1;
         }
     }
 
-    return [data1d, data2d];
+    return [physical_data, logical_data];
 }
 
 function parseXlaShape(shapeString) {
@@ -212,13 +212,13 @@ function visualizeShape() {
     let tile1 = tilingDimensions[1];
     let tiling = [tile0, tile1];
 
-    const [data1d, data2d] = generateData(shape, tiling);
-    console.log(data1d);
-    console.log(data2d);
+    const [physical_data, logical_data] = generateData(shape, tiling);
+    console.log(physical_data);
+    console.log(logical_data);
 
-    let logical_view = create2DTable(data2d, "table2d", "logical-view");
-    let physical_view = create1DTable(data1d, "table1d", "physical-view");
-    let memmref_view = create2DTable(data2d, "table2d-rename-me", "logical-view-of-physical-view");
+    let logical_view = create2DTable(logical_data, "table2d", "logical-view");
+    let physical_view = create1DTable(physical_data, "table1d", "physical-view");
+    let memmref_view = create2DTable(logical_data, "table2d-rename-me", "logical-view-of-physical-view");
 
 }
 
