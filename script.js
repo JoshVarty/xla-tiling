@@ -1,4 +1,4 @@
-function createTable(tableData, tableId) {
+function createTable(tableData, tableId, containerId) {
     let table = document.createElement("table");
     table.id = tableId;
     let tableBody = document.createElement("tbody");
@@ -35,7 +35,7 @@ function createTable(tableData, tableId) {
     // Otherwise just add it.
     let oldTable = document.getElementById(tableId);
     if (oldTable == undefined) {
-        let table_container = document.getElementById("table-container");
+        let table_container = document.getElementById(containerId);
         table_container.appendChild(table);
     } else {
         oldTable.replaceWith(table);
@@ -193,8 +193,9 @@ function visualizeShape() {
     console.log(data1d);
     console.log(data2d);
 
-    createTable(data2d, "table2d");
-    createTable(data1d, "table1d");
+    createTable(data2d, "table2d", "logical-view");
+    createTable(data1d, "table1d", "physical-view");
+    createTable(data2d, "table2d-rename-me", "logical-view-of-physical-view");
 
 }
 
