@@ -1,4 +1,38 @@
-function createTable(tableData, tableId, containerId) {
+
+function create1DTable(tableData, tableId, containerId) {
+    let table = document.createElement("table");
+    table.id = tableId;
+    let tableBody = document.createElement("tbody");
+
+    console.log(tableData);
+
+    let row = document.createElement('tr');
+    tableData.forEach(function (rowData) {
+
+        let cell = document.createElement("td");
+        if (rowData == -1) {
+            cell.classList.add("pad-value")
+        }
+        cell.appendChild(document.createTextNode(rowData));
+        row.appendChild(cell);
+
+    });
+    tableBody.appendChild(row);
+
+    table.appendChild(tableBody);
+
+    // If there's an existing table with this ID, replace it.
+    // Otherwise just add it.
+    let oldTable = document.getElementById(tableId);
+    if (oldTable == undefined) {
+        let table_container = document.getElementById(containerId);
+        table_container.appendChild(table);
+    } else {
+        oldTable.replaceWith(table);
+    }
+}
+
+function create2DTable(tableData, tableId, containerId) {
     let table = document.createElement("table");
     table.id = tableId;
     let tableBody = document.createElement("tbody");
@@ -7,25 +41,14 @@ function createTable(tableData, tableId, containerId) {
 
     tableData.forEach(function (rowData) {
         let row = document.createElement('tr');
-
-        if (Array.isArray(rowData)) {
-            rowData.forEach(function (cellData) {
-                let cell = document.createElement("td");
-                if (cellData == -1) {
-                    cell.classList.add("pad-value")
-                }
-                cell.appendChild(document.createTextNode(cellData));
-                row.appendChild(cell);
-            });
-        } else {
+        rowData.forEach(function (cellData) {
             let cell = document.createElement("td");
-            if (rowData == -1) {
+            if (cellData == -1) {
                 cell.classList.add("pad-value")
             }
-            cell.appendChild(document.createTextNode(rowData));
+            cell.appendChild(document.createTextNode(cellData));
             row.appendChild(cell);
-        }
-
+        });
         tableBody.appendChild(row);
     });
 
@@ -193,9 +216,9 @@ function visualizeShape() {
     console.log(data1d);
     console.log(data2d);
 
-    createTable(data2d, "table2d", "logical-view");
-    createTable(data1d, "table1d", "physical-view");
-    createTable(data2d, "table2d-rename-me", "logical-view-of-physical-view");
+    let logical_view = create2DTable(data2d, "table2d", "logical-view");
+    let physical_view = create1DTable(data1d, "table1d", "physical-view");
+    let memmref_view = create2DTable(data2d, "table2d-rename-me", "logical-view-of-physical-view");
 
 }
 
