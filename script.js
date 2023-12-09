@@ -1,4 +1,14 @@
 
+function getPhysicalShape(shape, tiling) {
+    assert(shape.length == tiling.length)
+
+    let physical_shape = Array(shape.length);
+    for (let i = 0; i < shape.length; i++) {
+        physical_shape[i] = roundUpToMultiple(shape[i], tiling[i]);
+    }
+    return physical_shape;
+}
+
 function create1DTable(tableData, tableId, containerId) {
     let table = document.createElement("table");
     table.id = tableId;
@@ -156,7 +166,17 @@ function generateData(shape, tiling) {
         }
     }
 
-    return [physical_data, logical_data];
+    // The 2D representation of the 1D physical data if we ignore tiling altogether.
+    let memref_data = Array(roundedRows).fill().map(() => Array(roundedCols).fill(-1));
+    let physical_shape = getPhysicalShape(shape, tiling);
+    for (let i = 0; i < physical_shape[0]; i++) {
+        for (let j = 0; j < physical_shape[1]; j++) {
+            let linear_index = i * physical_shape[1] + j;
+            memref_data[i][j] = physical_data[linear_index];
+        }
+    }
+
+    return [physical_data, logical_data, memref_data];
 }
 
 function parseXlaShape(shapeString) {
@@ -212,13 +232,13 @@ function visualizeShape() {
     let tile1 = tilingDimensions[1];
     let tiling = [tile0, tile1];
 
-    const [physical_data, logical_data] = generateData(shape, tiling);
+    const [physical_data, logical_data, memref_data] = generateData(shape, tiling);
     console.log(physical_data);
     console.log(logical_data);
 
     let logical_view = create2DTable(logical_data, "table2d", "logical-view");
     let physical_view = create1DTable(physical_data, "table1d", "physical-view");
-    let memmref_view = create2DTable(logical_data, "table2d-rename-me", "logical-view-of-physical-view");
+    let memmref_view = create2DTable(memref_data, "table2d-rename-me", "logical-view-of-physical-view");
 
 }
 
@@ -228,13 +248,13 @@ document.getElementById("visualize-button").onclick = function () {
 };
 
 // Set up KeyUp handler to visualize when the user presses <Enter>.
-document.getElementById("shape-input").onkeyup = function(e) {
-    if(e.key === 'Enter' || e.keyCode === 13) {
+document.getElementById("shape-input").onkeyup = function (e) {
+    if (e.key === 'Enter' || e.keyCode === 13) {
         visualizeShape();
     }
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     // Start with the default shape.
     visualizeShape();
 });
