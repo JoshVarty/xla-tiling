@@ -236,9 +236,17 @@ function visualizeShape() {
     console.log(physical_data);
     console.log(logical_data);
 
-    let logical_view = create2DTable(logical_data, "table2d", "logical-view");
-    let physical_view = create1DTable(physical_data, "table1d", "physical-view");
-    let memmref_view = create2DTable(memref_data, "table2d-rename-me", "logical-view-of-physical-view");
+    create2DTable(logical_data, "table2d", "logical-view");
+    create1DTable(physical_data, "table1d", "physical-view");
+    create2DTable(memref_data, "table2d-rename-me", "logical-view-of-physical-view");
+
+    const tdPadding = document.getElementById('td-padding');
+    if (physical_data.length < 100) {
+        // Update the CSS rule to change the padding for all <td> elements
+        tdPadding.textContent = 'td { padding: 10px; }';
+    } else {
+        tdPadding.textContent = 'td { padding: 1px; }';
+    }
 
 }
 
